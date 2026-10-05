@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { ethers } from 'ethers';
+import LandRegistryData from '../contracts/LandRegistryData.json';
 
 export const Web3Context = createContext();
 
@@ -21,12 +22,10 @@ export const Web3Provider = ({ children }) => {
         const signer = await providerInstance.getSigner();
         
         try {
-            // Dynamically import to avoid errors before compile/deploy
-            const LandRegistryData = await import('../contracts/LandRegistryData.json');
-            if (LandRegistryData && LandRegistryData.default.address) {
+            if (LandRegistryData && LandRegistryData.address) {
                 const contractInstance = new ethers.Contract(
-                    LandRegistryData.default.address,
-                    LandRegistryData.default.abi,
+                    LandRegistryData.address,
+                    LandRegistryData.abi,
                     signer
                 );
                 setContract(contractInstance);
